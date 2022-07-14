@@ -1,168 +1,475 @@
-<!DOCTYPE html><html class="appearance-dark" lang="zh"><head><meta charset="UTF-8"><title>Aipra's blog</title><meta name="description" content="I am description"><meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, initial-scale=1"><!-- Google Analytics --><!-- End Google Analytics -->
-<!-- Baidu Analytics --><!-- End Baidu Analytics --><link rel="icon" href="/images/favicon.png"><link rel="stylesheet" href="/style/common/bulma.css"><link rel="stylesheet" href="/style/base.css"><link rel="stylesheet" href="/style/common/helper.css"><script src="/js/common.js"></script><link rel="stylesheet" href="/style/widget-post-list.css"><meta name="generator" content="Hexo 6.2.0"></head><body class="is-flex is-flex-direction-column"><header class="header-widget is-flex-shrink-0 is-hidden-mobile"><div class="container is-fullhd is-flex is-justify-content-space-between is-align-items-center is-full-height"><section class="is-hidden-mobile is-flex-shrink-0"><h2><a href="/">Aipra's blog</a></h2></section><h3 class="is-hidden-mobile is-family-serif is-full-height is-flex is-align-items-center is-flex-shrink-0"></h3><aside class="is-flex-shrink-0"><h3 class="is-inline-block"><a href="/">首页</a></h3><h3 class="is-inline-block"><a href="/about">关于</a></h3><h3 class="is-inline-block"><a href="/archives">归档</a></h3></aside></div></header><header class="is-flex header-widget is-flex-shrink-0 is-align-items-center is-justify-content-center is-hidden-tablet"><h3 class="is-inline-block"><a href="/">首页</a></h3><h3 class="is-inline-block"><a href="/about">关于</a></h3><h3 class="is-inline-block"><a href="/archives">归档</a></h3></header><main><article class="post-container is-flex is-justify-content-center section container is-max-widescreen pt-4 px-2"><div class="columns is-variable is-1-tablet is-3-desktop-only is-2-widescreen is-full-width"><section class="column"><article class="post-item-card"><section class="content post-card-content p-4 pb-5"><time class="has-text-grey" datetime="2022-07-14T03:43:50.084Z">2022-07-14</time><p class="is-flex-grow-2 mt-2">linux下编程目录结构
-src：源码
-incl：头文件
-bin：执行码
-lib：静态&amp;#x2F;动态链接库
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
 
-以下的代码编译都是依照这个目录结构
-开始零.入门先看一个makefile的例子：
-12345hello:hello.c	gcc -I$&amp;#123;HOME&amp;#125;/incl -c hello.c # .c包含incl下的头文件	gcc -o hello hello.o # 链接hello.o生成hello二进制包	rm -f hello.o # 删除链接的.o文件	mv hello $&amp;#123;HOME&amp;#125;/bin # 将二进制包移动到特定目录下
-可以发现，makefile不就是把编译、链接、删除和移动写成shell脚本吗？没错，去掉第一行，其他代码粘贴到shell脚本里同样可以编译..</p><a class="button is-default mt-2 has-text-weight-semibold" href="/2022/07/14/makefile/">更多</a></section></article><article class="post-item-card"><section class="content post-card-content p-4 pb-5"><time class="has-text-grey" datetime="2022-07-14T03:21:18.287Z">2022-07-14</time><p class="is-flex-grow-2 mt-2">gcc 与 g++ 分别是 c &amp;amp; c++ 的编译器 gcc&amp;#x2F;g++ 在执行编译工作的时候，总共需要4步：
 
-预处理,生成 .i 的文件[预处理器cpp]
-将预处理后的文件转换成汇编语言, 生成文件 .s [编译器egcs]
-由汇编变为目标代码(机器代码)生成 .o 的文件[汇编器as]
-连接目标代码, 生成可执行程序[链接器ld]
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-一些参数：-x language filename告诉gcc filename是language所对应的语言,并且对于另一个参数之前的文件都有效，可以使用的参数有 c objective-c c-header c++ cpp-output assembler 与 assembler-with-cpp实际用法：
-1gcc -x c hello.world
--x..</p><a class="button is-default mt-2 has-text-weight-semibold" href="/2022/07/14/gcc-md/">更多</a></section></article><article class="post-item-card"><section class="content post-card-content p-4 pb-5"><h2 class="mt-4 mb-0 is-family-serif"><a href="/2022/07/11/hello-world/">Hello World</a></h2><time class="has-text-grey" datetime="2022-07-11T08:30:48.706Z">2022-07-11</time><p class="is-flex-grow-2 mt-2">Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
-Quick StartCreate a new post1$ hexo new &amp;quot;My New Post&amp;quot;
+<link rel="stylesheet" href="/css/main.css">
 
-More info: Writing
-Run server1$ hexo server
 
-More info: Server
-Generate static files1$ hexo genera..</p><a class="button is-default mt-2 has-text-weight-semibold" href="/2022/07/11/hello-world/">更多</a></section></article></section><aside class="column is-hidden-mobile is-4-tablet is-3-widescreen"><style>.search-widget .search-input {
-    border: none;
-    outline: none;
-    background: transparent;
-    color: var(--second-text-color);
-}
-.search-widget .search-content {
-    position: absolute;
-    left: 0;
-    top: calc(100% - 3px);
-    z-index: 2;
 
-    width: 100%;
-    height: 0;
-    max-height: 550px;
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-    overflow: auto;
-    box-sizing: border-box;
+<script class="next-config" data-name="main" type="application/json">{"hostname":"aipra.xyz","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.12.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
-    background: var(--top-bar-bg-color);
-    backdrop-filter: blur(var(--backdropFilter));
-    -webkit-backdrop-filter: blur(var(--backdropFilter));
+    <meta name="description" content="I am description">
+<meta property="og:type" content="website">
+<meta property="og:title" content="A Simple Web Site">
+<meta property="og:url" content="http://aipra.xyz/index.html">
+<meta property="og:site_name" content="A Simple Web Site">
+<meta property="og:description" content="I am description">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="Aipra">
+<meta name="twitter:card" content="summary">
 
-    border-bottom-left-radius: var(--borderRadius);
-    border-bottom-right-radius: var(--borderRadius);
-    box-shadow: 0 12px 15px rgba(0, 0, 0, 0.08);
-}
 
-.search-widget .search-content a:hover h5 {
-    color: #3273dc!important;
-}
-</style><main class="aside-card-container search-widget is-relative"><label for="searchInput"><div class="is-flex px-4" id="searchButton"><i class="iconfont icon--search1 mr-1"></i><input class="search-input is-flex-grow-1" id="searchInput" placeholder="搜索内容.."></div></label><section class="search-content content" id="searchContent"></section></main><script>var searchDatabase = []
-var searchInputEl = document.getElementById('searchInput')
-var searchButtonEl = document.getElementById('searchButton')
-var searchResultEl = document.getElementById('searchContent')
+<link rel="canonical" href="http://aipra.xyz/">
 
-searchInputEl.oninput = function (evt) {
-    var searchValue = evt.srcElement.value
-    var haveSearchValue = Boolean(searchValue.trim())
-    if (!haveSearchValue) {
-        searchResultEl.style.height = 0
-        searchResultEl.innerHTML = null
-        return
-    }
 
-    var searchResults = searching(searchValue)
 
-    if (searchResults.length > 0) {
-        renderSearchResults(searchResults)
-    }
-}
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"index.html","title":""}</script>
 
-function renderSearchResults(results) {
-    searchResultEl.innerHTML = null
-    var fragment = document.createDocumentFragment()
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>A Simple Web Site</title>
+  
 
-    results.forEach(function (item) {
-        var link = document.createElement('a')
-        var title = document.createElement('h5')
-        var content = document.createElement('p')
 
-        title.className = 'mb-1'
-        title.innerText = item.title
-        content.innerText = item.content
 
-        link.href = item.link
-        link.appendChild(title)
-        link.appendChild(content)
-        link.className = 'p-4 is-block'
 
-        fragment.appendChild(link)
-    })
 
-    searchResultEl.appendChild(fragment)
-    searchResultEl.style.height = 'auto'
-}
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
 
-function searching(inputText) {
-    var inputTexts = inputText.split(' ')
-    var searchResults = []
-    inputTexts.forEach(function (searchKey) {
-        var haveSearchValue = Boolean(searchKey.trim())
-        if (!haveSearchValue) return
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
 
-        var key = searchKey.toLowerCase()
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
 
-        for (var entry of searchDatabase) {
-            var title = entry.getElementsByTagName('title')[0].textContent
-            var link = entry.getElementsByTagName('link')[0].getAttribute('href')
-            var contentWithTags = entry.getElementsByTagName('content')[0].textContent
-            var rawContent = contentWithTags.trim().replace(/<[^>]+>/g, '').toLowerCase()
+  <div class="site-meta">
 
-            var LENGTH = 80
-            var finalContent = ''
-            var contentLength = rawContent.length
-            var searchResultIdx = rawContent.indexOf(key)
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">A Simple Web Site</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Nothing</p>
+  </div>
 
-            var startIdx = searchResultIdx - 20,
-                endIdx = startIdx + LENGTH
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
 
-            if (startIdx < 0) {
-                startIdx = 0
-                endIdx = 100
-            }
 
-            endIdx > contentLength && (endIdx = contentLength)
 
-            finalContent = rawContent.substring(startIdx, endIdx)
 
-            if (title.indexOf(key) > -1 || searchResultIdx > -1) {
-                searchResults.push({
-                    link: link,
-                    title: title,
-                    content: finalContent
-                })
-            }
-        }
-    })
-    return searchResults
-}
 
-searchButtonEl.onclick = function () {
-    if (searchDatabase.length > 0) return;
 
-    fetch(window.location.href + '/search.xml').then(res => res.text()).then(res => {
-        var domparser = new DOMParser
-        var doc = domparser.parseFromString(res, 'application/xml')
-        searchDatabase = doc.getElementsByTagName('search')[0].children
-    })
-}</script><main class="aside-card-container profile-widget"><!-- todo: 使用取色工具动态阴影--><section class="is-flex is-flex-direction-column is-justify-content-center is-align-items-center"><section class="is-flex is-justify-content-center avatar is-clipped skeleton"><!-- debug images "https://api.ixiaowai.cn/gqapi/gqapi.php"--><img class="js-img-fadeIn" src="https://img.gejiba.com/images/ac294f76ee4dfb14ca38895467a1670c.png" alt="user avatar"></section><h3 class="user-name">Aipra</h3><blockquote class="has-text-centered is-relative"><span style="margin-bottom: 5px;">Alone</span></blockquote><address class="has-text-centered has-text-grey"><i class="iconfont icon-location" style="margin-right: 5px;"></i><span class="has-text-grey">On Earth</span></address></section><section class="sns-container is-flex is-justify-content-center is-align-items-center"><a title="twitter" target="_blank" rel="noopener nofollow" href="//twitter.com//"><i class="iconfont icon-twitter"></i></a><!-- Github--><!-- Ins--><a title="instagram" target="_blank" rel="noopener nofollow" href="//www.instagram.com//"><i class="iconfont icon-ins"></i></a><!-- RSS--><!-- 知乎--><!-- 领英--><!-- 脸书--><a title="facebook" target="_blank" rel="noopener nofollow" href="//www.facebook.com//"><i class="iconfont icon-tian7_facebook"></i></a></section></main><main class="aside-card-container recent-widget"><h3>最近</h3><ul><li class="is-flex"><!-- change to element replace image placeholder--><img class="js-img-fadeIn" src="https://ui-avatars.com/api/?background=f5f5f5&amp;name=标题" alt="cover"><!--else--><!--    div.post-img-placeholder--><section class="is-flex-grow-2"><p class="has-text-weight-semibold" style="line-height: 20px; font-size: 14px"><a href="/2022/07/14/makefile/">标题</a></p><time class="has-text-weight-semibold has-text-grey" datetime="2022-07-14T03:43:50.084Z">2022-07-14</time></section></li><li class="is-flex"><!-- change to element replace image placeholder--><img class="js-img-fadeIn" src="https://ui-avatars.com/api/?background=f5f5f5&amp;name=标题" alt="cover"><!--else--><!--    div.post-img-placeholder--><section class="is-flex-grow-2"><p class="has-text-weight-semibold" style="line-height: 20px; font-size: 14px"><a href="/2022/07/14/gcc-md/">标题</a></p><time class="has-text-weight-semibold has-text-grey" datetime="2022-07-14T03:21:18.287Z">2022-07-14</time></section></li><li class="is-flex"><!-- change to element replace image placeholder--><img class="js-img-fadeIn" src="https://ui-avatars.com/api/?background=f5f5f5&amp;name=He" alt="cover"><!--else--><!--    div.post-img-placeholder--><section class="is-flex-grow-2"><p class="has-text-weight-semibold" style="line-height: 20px; font-size: 14px"><a href="/2022/07/11/hello-world/">Hello World</a></p><time class="has-text-weight-semibold has-text-grey" datetime="2022-07-11T08:30:48.706Z">2022-07-11</time></section></li></ul></main><main class="aside-card-container archives-widget"><h3>归档</h3><section><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">July 2022</a><span class="archive-list-count">3</span></li></ul></section></main></aside></div></article><script>$claudia.fadeInImage(null, $claudia.blurBackdropImg)
 
-window.addEventListener('resize', $claudia.throttle(function () {
-    var images = document.querySelectorAll('.js-img-fadeIn')
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
 
-    images.forEach($claudia.blurBackdropImg)
-}, 150))</script></main><footer class="is-flex is-flex-direction-column is-align-items-center is-flex-shrink-0 is-family-serif"><section class="sns-container"><a title="twitter" target="_blank" rel="noopener nofollow" href="//twitter.com//"><i class="iconfont icon-twitter"></i></a><!-- Github--><!-- Ins--><a title="instagram" target="_blank" rel="noopener nofollow" href="//www.instagram.com//"><i class="iconfont icon-ins"></i></a><!-- RSS--><!-- 知乎--><!-- 领英--><!-- 脸书--><a title="facebook" target="_blank" rel="noopener nofollow" href="//www.facebook.com//"><i class="iconfont icon-tian7_facebook"></i></a></section><p><span>Copyright ©</span><span> Aipra 2022</span></p><div class="is-flex is-justify-content-center is-flex-wrap-wrap"><p>Powered by Hexo &verbar;&nbsp;</p><p class="is-flex is-justify-content-center"><a title="Hexo theme author" target="_blank" rel="noopener" href="//github.com/haojen">Theme by Haojen&nbsp;</a></p><div style="margin-top: 2px"><a class="github-button" title="github-button" target="_blank" rel="noopener" href="https://github.com/haojen/hexo-theme-Claudia" data-color-scheme="no-preference: light; light: light; dark: dark;" data-show-count="true"></a></div></div><div><span></span></div></footer><script async defer src="https://buttons.github.io/buttons.js"></script><script>$claudia.fadeInImage(null, $claudia.blurBackdropImg)
+  <aside class="sidebar">
 
-window.addEventListener('resize', $claudia.throttle(function () {
-    var images = document.querySelectorAll('.js-img-fadeIn')
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
 
-    images.forEach($claudia.blurBackdropImg)
-}, 150))</script></body></html>
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Aipra</p>
+  <div class="site-description" itemprop="description">I am description</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://aipra.xyz/2022/07/14/makefile/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Aipra">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="A Simple Web Site">
+      <meta itemprop="description" content="I am description">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | A Simple Web Site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/07/14/makefile/" class="post-title-link" itemprop="url">MakeFile简介</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-07-14 11:43:50 / 修改时间：12:07:25" itemprop="dateCreated datePublished" datetime="2022-07-14T11:43:50+08:00">2022-07-14</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="linux下编程目录结构"><a href="#linux下编程目录结构" class="headerlink" title="linux下编程目录结构"></a>linux下编程目录结构</h1><ul>
+<li>src：源码</li>
+<li>incl：头文件</li>
+<li>bin：执行码</li>
+<li>lib：静态&#x2F;动态链接库</li>
+</ul>
+<p>以下的代码编译都是依照这个目录结构</p>
+<h1 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h1><h2 id="零-入门"><a href="#零-入门" class="headerlink" title="零.入门"></a>零.入门</h2><p>先看一个makefile的例子：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">hello:hello.c</span></span><br><span class="line">	gcc -I$&#123;HOME&#125;/incl -c hello.c <span class="comment"># .c包含incl下的头文件</span></span><br><span class="line">	gcc -o hello hello.o <span class="comment"># 链接hello.o生成hello二进制包</span></span><br><span class="line">	rm -f hello.o <span class="comment"># 删除链接的.o文件</span></span><br><span class="line">	mv hello $&#123;HOME&#125;/bin <span class="comment"># 将二进制包移动到特定目录下</span></span><br></pre></td></tr></table></figure>
+<p>可以发现，makefile不就是把编译、链接、删除和移动写成shell脚本吗？没错，去掉第一行，其他代码粘贴到shell脚本里同样可以编译成功，一点问题都没有。但这只是简单的makefile，复杂的makefile还是会看不懂，别着急，咱们来慢慢分析。</p>
+<h2 id="壹-makefile的结构说明"><a href="#壹-makefile的结构说明" class="headerlink" title="壹.makefile的结构说明"></a>壹.makefile的结构说明</h2><p>makefile里面包含了五个东西：变量定义、显式规则、隐晦规则、文件指示和注释。接下来让我一一地介绍</p>
+<ol>
+<li><strong>变量的定义</strong> 在Makefile中我们要定义一系列的变量，变量一般都是字符串，这个有点像C语言中的宏，当Makefile被执行时，其中的变量都会被扩展到相应的引用位置上。</li>
+<li><strong>显式规则</strong> 显式规则说明了，如何生成一个或多的的目标文件。这是由Makefile的书写者明显指出，要生成的文件，文件的依赖文件，生成的命令。 刚才写的疑似shell脚本的Makefile全部都是显示规则。</li>
+<li><strong>隐晦规则</strong> 由于我们的make有自动推导的功能，所以隐晦的规则可以让我们比较粗糙地简略地书写Makefile，这是由make所支持的。</li>
+<li><strong>文件指示</strong> 其包括了三个部分，一个是在一个Makefile中引用另一个Makefile，就像C语言中的include一样。</li>
+<li><strong>注释</strong> Makefile中只有行注释，和UNIX的Shell脚本一样，其注释是用“#”字符，这个就像C&#x2F;C++中的“&#x2F;&#x2F;”一样。如果你要在你的Makefile中使用“#”字符。</li>
+</ol>
+<h2 id="贰-复杂一点的makefile"><a href="#贰-复杂一点的makefile" class="headerlink" title="贰.复杂一点的makefile"></a>贰.复杂一点的makefile</h2><p>根据上面的结构说明，我们对Makefile一层一层的改写，首先是隐晦规则，告诉大家其中一种用法：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 变量的定义</span></span><br><span class="line">INCL=-I<span class="variable">$&#123;HOME&#125;</span>/incl</span><br><span class="line"><span class="comment">#隐含规则</span></span><br><span class="line">.SUFFIXES: .cpp .c <span class="comment"># 将后缀为.cpp和.c的文件分别按下列的规则生成.o文件</span></span><br><span class="line">.cpp.o:</span><br><span class="line">	g++ <span class="variable">$&#123;INCL&#125;</span> -c $&lt; <span class="comment"># 变量的使用 $&lt;是一个预定义变量，后面会提到</span></span><br><span class="line"></span><br><span class="line">.c.o:</span><br><span class="line">	gcc <span class="variable">$&#123;INCL&#125;</span> -c $&lt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># C++编译</span></span><br><span class="line">hellocpp:hellocpp.o <span class="comment"># 文件指示</span></span><br><span class="line">	<span class="comment"># 隐含规则已经编译了 g++ $&#123;INCL&#125; -c hello.cpp</span></span><br><span class="line">	<span class="comment"># 显式规则</span></span><br><span class="line">	<span class="built_in">echo</span> <span class="string">&quot;开始编译&quot;</span> <span class="comment"># 增加编译日志</span></span><br><span class="line">	g++ -o hellocpp hellocpp.o <span class="comment"># 利用.o文件生成二进制可执行文件</span></span><br><span class="line">	<span class="built_in">rm</span> -f hellocpp.o <span class="comment"># 移除生成的.o文件</span></span><br><span class="line">	<span class="built_in">mv</span> hellocpp <span class="variable">$&#123;HOME&#125;</span>/bin</span><br><span class="line">	<span class="built_in">echo</span> <span class="string">&quot;编译结束&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># C编译</span></span><br><span class="line">hello:hello.o</span><br><span class="line">	<span class="comment"># 隐含规则已经编译了 gcc $&#123;INCL&#125; -c hello.c</span></span><br><span class="line">	<span class="comment"># 显式规则</span></span><br><span class="line">	<span class="built_in">echo</span> <span class="string">&quot;开始编译&quot;</span></span><br><span class="line">	gcc -o hello hello.o</span><br><span class="line">	<span class="built_in">rm</span> -f hello.o</span><br><span class="line">	<span class="built_in">mv</span> hello <span class="variable">$&#123;HOME&#125;</span>/bin</span><br><span class="line">	<span class="built_in">echo</span> <span class="string">&quot;编译结束&quot;</span></span><br></pre></td></tr></table></figure>
+<p>刚才说到了预定义变量，下面是常用的预定义变量的含义：<br><strong>自定义变量</strong></p>
+<ul>
+<li><code>$*</code>不包含扩展名的目标文件名称。</li>
+<li><code>$+</code>所有的依赖文件，以空格分开，并以出现的先后为序，可能包含重复的依赖文件。</li>
+<li><code>$&lt;</code>第一个依赖文件的名称。</li>
+<li><code>$?</code>所有的依赖文件，以空格分开，这些依赖文件的修改日期比目标的创建日期晚。</li>
+<li><code>$@</code>目标的完整名称。</li>
+<li><code>$^</code>所有的依赖文件，以空格分开，不包含重复的依赖文件。</li>
+<li><code>$%</code> 如果目标是归档成员，则该变量表示目标的归档成员名称。</li>
+</ul>
+<p><strong>特殊变量</strong></p>
+<ul>
+<li><code>$(MAKE)</code>：当前make解释器的文件名</li>
+<li><code>$(MAKECMDGOALS)</code>：命令行中指定的目标名（make的命令行参数）</li>
+<li><code>$(MAKEFILE_LIST)</code>：make所需要处理的makefile文件列表，当前makefile的文件名总是位于列表的最后，文件名之间以空格进行分隔</li>
+<li><code>$(MAKE_VERSION)</code>：当前make解释器的版本</li>
+<li><code>$(CURDIR)</code>：当前make解释器的工作目录</li>
+<li><code>$(.VARIABLES)</code>：所有已经定义的变量名列表（预定义变量和自定义变量）</li>
+</ul>
+<p>再对上面的makefile文件扩充一下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#最后形成的Makefile</span></span><br><span class="line">INCL=-I<span class="variable">$&#123;HOME&#125;</span>/incl</span><br><span class="line">BIN=$(HOME)/bin</span><br><span class="line">OBJ1=hellocpp.o</span><br><span class="line">OBJ2=hello.o <span class="comment"># 定义了更多的变量</span></span><br><span class="line"></span><br><span class="line">.SUFFIXES: .cpp .c</span><br><span class="line">.cpp.o:</span><br><span class="line">	g++ <span class="variable">$&#123;INCL&#125;</span> -c $&lt; <span class="comment"># 生成.o文件的方式：将第一次看到的.cpp文件，通过引入的库文件，生成.o文件</span></span><br><span class="line"></span><br><span class="line">.c.o:</span><br><span class="line">	gcc <span class="variable">$&#123;INCL&#125;</span> -c $&lt;</span><br><span class="line"></span><br><span class="line">all: hellocpp hello</span><br><span class="line"></span><br><span class="line"><span class="comment">#C++编译</span></span><br><span class="line">hellocpp:<span class="variable">$&#123;OBJ1&#125;</span></span><br><span class="line">	@<span class="built_in">echo</span> <span class="string">&quot;============开始编译============&quot;</span></span><br><span class="line">	g++ -o <span class="variable">$@</span> $?</span><br><span class="line">	@<span class="built_in">rm</span> -f <span class="variable">$&#123;OBJ1&#125;</span></span><br><span class="line">	@<span class="built_in">mv</span> <span class="variable">$@</span> <span class="variable">$&#123;BIN&#125;</span></span><br><span class="line">	@<span class="built_in">echo</span> <span class="string">&quot;============编译结束============&quot;</span></span><br><span class="line">	@<span class="built_in">echo</span> <span class="string">&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#C编译</span></span><br><span class="line">hello:<span class="variable">$&#123;OBJ2&#125;</span></span><br><span class="line">	@<span class="built_in">echo</span> <span class="string">&quot;============开始编译============&quot;</span></span><br><span class="line">	gcc -o <span class="variable">$@</span> $?</span><br><span class="line">	@<span class="built_in">rm</span> -f <span class="variable">$&#123;OBJ2&#125;</span></span><br><span class="line">	@<span class="built_in">mv</span> <span class="variable">$@</span> <span class="variable">$&#123;BIN&#125;</span></span><br><span class="line">	@<span class="built_in">echo</span> <span class="string">&quot;============编译结束============&quot;</span></span><br><span class="line">	@<span class="built_in">echo</span> <span class="string">&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://aipra.xyz/2022/07/14/gcc-md/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Aipra">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="A Simple Web Site">
+      <meta itemprop="description" content="I am description">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | A Simple Web Site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/07/14/gcc-md/" class="post-title-link" itemprop="url">gcc简介</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-07-14 11:21:18 / 修改时间：12:07:05" itemprop="dateCreated datePublished" datetime="2022-07-14T11:21:18+08:00">2022-07-14</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>gcc 与 g++ 分别是 c &amp; c++ 的编译器 gcc&#x2F;g++ 在执行编译工作的时候，总共需要4步：</p>
+<ol>
+<li>预处理,生成 .i 的文件[预处理器cpp]</li>
+<li>将预处理后的文件转换成汇编语言, 生成文件 .s [编译器egcs]</li>
+<li>由汇编变为目标代码(机器代码)生成 .o 的文件[汇编器as]</li>
+<li>连接目标代码, 生成可执行程序[链接器ld]</li>
+</ol>
+<p>一些参数：<br><strong>-x language filename</strong><br>告诉gcc filename是language所对应的语言,并且对于另一个参数之前的文件都有效，可以使用的参数有 <em>c</em> <em>objective-c</em> <em>c-header</em> <em>c++</em> <em>cpp-output</em> <em>assembler</em> 与 <em>assembler-with-cpp</em><br>实际用法：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -x c hello.world</span><br></pre></td></tr></table></figure>
+<p><strong>-x none filename</strong><br>告诉gcc 自动检测filename后缀，自动识别文件类型<br>实际用法：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -x c hello.world -x none hello.c</span><br></pre></td></tr></table></figure>
+<p><strong>-c</strong><br>只是激活预处理，编译和汇编，也就是只是把程序做成obj文件<br>实际用法：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -c hello.c</span><br></pre></td></tr></table></figure>
+<p>将生成一个同名.o的obj文件<br><strong>-S</strong><br>只激活预处理和编译，将文件变成汇编代码<br>实际用法：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -S hello.c</span><br></pre></td></tr></table></figure>
+<p>将生成一个同名.S的汇编代码文件<br><strong>-E</strong><br>只激活预处理，这个不生成文件，需要自己重定向到一个文本文件里<br>实际用法：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gcc -E hello.c &gt; hello.txt</span><br><span class="line">gcc -E hello.c | more <span class="comment"># 将预处理后的内容输出到终端</span></span><br></pre></td></tr></table></figure>
+<p><strong>-o</strong><br>设置目标名称，默认是a.out<br>实际用法</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -o hello.asm hello.c <span class="comment"># windows下则是 gcc -o hello.exe hello.c</span></span><br></pre></td></tr></table></figure>
+<p><strong>-include</strong><br>包含某个代码，也就是使用另一个文件作为头文件，作用相当于在代码中使用<code>#include &quot;filename&quot;</code><br>实际用法：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc hello.c -include ./hello.h</span><br></pre></td></tr></table></figure>
+<p><strong>-Idir</strong><br>在使用<code>#include &quot;filename&quot;</code>的时候，gcc&#x2F;g++会现在当前目录查找头文件。如果没有找到，就返回到默认的头文件当中查找。如果使用 <strong>-l</strong>定制了目录，它会现先在你指定的目录中查找，然后按照正常的顺序查找头文件。<br>而对于<code>#include &lt;filename&gt;</code> gcc&#x2F;g++则会先在 <strong>-l</strong>指定的目录中查找，查找不到，然后到系统默认的头文件目录去查找<br><strong>-dirafter dir</strong><br>当在 <strong>-I</strong>指定的目录查找不到时，将会到这个目录中查找。<br><strong>-I-</strong><br>取消前一个参数的功能<br><strong>-llibrary</strong><br>指定编译的时候使用的库<br>例子用法：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -lsdl hello.c</span><br></pre></td></tr></table></figure>
+<p>使用sdl库编译程序<br><strong>-Ldir</strong><br>指定编译的时候搜索库的路径。不然只在标准的目录中找<br><strong>-g</strong><br>只是编译器，在编译的时候输出调试信息<br><strong>-static</strong><br>此选项将禁止使用动态库，所以，编译出来的东西，一般都很大，也不需要什么动态连接库，就可以运行。<br><strong>-share</strong><br>此选项将尽量使用动态库，所以生成文件比较小，但是需要系统由动态库。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://aipra.xyz/2022/07/11/hello-world/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Aipra">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="A Simple Web Site">
+      <meta itemprop="description" content="I am description">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | A Simple Web Site">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/07/11/hello-world/" class="post-title-link" itemprop="url">Hello World</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-07-11 16:30:48" itemprop="dateCreated datePublished" datetime="2022-07-11T16:30:48+08:00">2022-07-11</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Aipra</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
