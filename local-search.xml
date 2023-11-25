@@ -4,6 +4,27 @@
   
   
   <entry>
+    <title>docker+portainer.md</title>
+    <link href="/2023-11/25/c6ddeb13fe22/"/>
+    <url>/2023-11/25/c6ddeb13fe22/</url>
+    
+    <content type="html"><![CDATA[<h1 id="安装官方包"><a href="#安装官方包" class="headerlink" title="安装官方包"></a>安装官方包</h1><p>官方安装文档<a target="_blank" rel="noopener" href="https://docs.docker.com/engine/install/">链接</a></p><p><img src="https://raw.githubusercontent.com/Aipra/imgbed/master/img/202311251721722.png" alt="发行版选择"><br>选择适合自己发行版的教程，直接安装服务器版本即可，桌面版并未增加常用功能，最大的差异是多了可视化界面。</p><p><img src="https://raw.githubusercontent.com/Aipra/imgbed/master/img/202311251724099.png" alt="hello-world"><br>按着教程直装，完成后能成功运行hello-world即可</p><blockquote><p>docker会直接更改iptables规则，对服务器有安全风险。建议编辑<code>/etc/default/docker</code>添加<code>DOCKER_OPTS=&quot;--iptables=false&quot;</code>阻止docker更改iptables,只需使用<code>ufw</code>自行打开端口，大大降低了安全风险。</p></blockquote><h1 id="安装pointer-C-ommunity-E-dition-版本"><a href="#安装pointer-C-ommunity-E-dition-版本" class="headerlink" title="安装pointer C(ommunity) E(dition)版本"></a>安装pointer C(ommunity) E(dition)版本</h1><p>安装教程<a target="_blank" rel="noopener" href="https://docs.portainer.io/start/install-ce/server/docker/linux">链接</a></p><p>安装完成后，不要忘记使用<code>ufw allow</code>打开<code>9443</code>和<code>8000</code>端口。</p><p>如若有自己的ssl证书可以遵循下面的命令保留potainer镜像，并删除其容器，重新使用自己的ssl证书生成容器</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo docker ps -a<br></code></pre></td></tr></table></figure><p>确定容器ID</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo docker stop [container ID]<br>sudo docker <span class="hljs-built_in">rm</span> [container ID]<br></code></pre></td></tr></table></figure><p>停止并删除portainer容器</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo docker run -d -p 8000:8000 -p &#123;对外网端口&#125;:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v &#123;证书文件所在位置&#125;:/cert -v portainer_data:/data portainer/portainer-ce:latest --ssl --sslcert /cert/yourdomain.crt --sslkey /cert/yourdomain.key<br></code></pre></td></tr></table></figure><p>重新生成portainer容器</p>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>configuration</tag>
+      
+      <tag>docker</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Xray+lts 配置</title>
     <link href="/2023-11/24/d0720d91add4/"/>
     <url>/2023-11/24/d0720d91add4/</url>
