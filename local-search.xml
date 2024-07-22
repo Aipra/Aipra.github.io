@@ -4,7 +4,7 @@
   
   
   <entry>
-    <title>docker+portainer.md</title>
+    <title>Docker+portainer</title>
     <link href="/2023-11/25/c6ddeb13fe22/"/>
     <url>/2023-11/25/c6ddeb13fe22/</url>
     
@@ -14,9 +14,9 @@
     
     <tags>
       
-      <tag>configuration</tag>
-      
       <tag>docker</tag>
+      
+      <tag>configuration</tag>
       
     </tags>
     
@@ -35,9 +35,9 @@
     
     <tags>
       
-      <tag>xray</tag>
-      
       <tag>configuration</tag>
+      
+      <tag>xray</tag>
       
     </tags>
     
